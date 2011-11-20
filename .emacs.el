@@ -114,9 +114,9 @@ and source-file directory for your debugger." t)
 (setq ruby-block-highlight-toggle t)
 
 ;;2011/2/21 tab to space
-;;(setq-default tab-width 2 indent-tabs-mode nil)
+(setq-default tab-width 2 indent-tabs-mode nil)
 ;;2011/6/12
-(setq-default tab-width 6 indent-tabs-mode t)
+;;(setq-default tab-width 6 indent-tabs-mode t)
 
 ;;2010/11/1 全角スペースとかに色を付ける http://ubulog.blogspot.com/2007/09/emacs_09.html
 (defface my-face-b-1 '((t (:background "medium aquamarine"))) nil)
