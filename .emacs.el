@@ -355,4 +355,6 @@ and source-file directory for your debugger." t)
 
 ;;2011/11/15 for ClojureScript
 ;; https://github.com/clojure/clojurescript/wiki/Emacs-%26-inferior-lisp-mode
-(setq inferior-lisp-program "browser-repl")
+(setq inferior-lisp-program "~/bin/browser-repl")
+;; clojure-mode for .cljs
+(add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
