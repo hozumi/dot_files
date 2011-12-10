@@ -358,3 +358,22 @@ and source-file directory for your debugger." t)
 (setq inferior-lisp-program "~/bin/browser-repl")
 ;; clojure-mode for .cljs
 (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
+
+;;2011/12/11 for daily memo
+;; http://0xcc.net/unimag/1/
+(setq user-full-name "Takahiro Hozumi")
+(setq user-mail-address "fatrow@googlemail.com")
+(defun memo ()
+  (interactive)
+  (let ((memo-file "~/Dropbox/diary.txt"))
+    (if (not (eq (current-buffer)
+                 (find-file-noselect memo-file)))
+        (set-buffer (find-file-other-window memo-file)))
+    (add-change-log-entry
+     nil
+     (expand-file-name memo-file))))
+(define-key ctl-x-map "m" 'memo)
+
+;;2011/12/11 kill-summary
+(autoload 'kill-summary "kill-summary" nil t)
+(define-key global-map "\ey" 'kill-summary)
