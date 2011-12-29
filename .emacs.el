@@ -1,22 +1,38 @@
-;;2010/10/21 load-path
-(setq load-path
-      (append
-       (list
-        (expand-file-name "~/.emacs.d/")
-        (expand-file-name "~/.emacs.d/auto-install/"))
-       load-path))
+;;2011/12/28 ユーザ指定のディレクトリ以下全てを load-path に追加
+;; http://masutaka.net/chalow/2009-07-05-3.html
+(defconst my-elisp-directory "~/.emacs.d/elisp" "The directory for my elisp file.")
 
-;;2011/5/5 rinari
-;; Interactively Do Things (highly recommended, but not strictly required)
-;;(require 'ido)
-;;(ido-mode t)
+(dolist (dir (let ((dir (expand-file-name my-elisp-directory)))
+               (list dir (format "%s%d" dir emacs-major-version))))
+  (when (and (stringp dir) (file-directory-p dir))
+    (let ((default-directory dir))
+      (add-to-list 'load-path default-directory)
+      (normal-top-level-add-subdirs-to-load-path))))
 
+;;2011/12/28 marmalade
+;; package-list-packages によってpackageのリストが取得できないと思っていたが、
+;;	http://marmalade-repo.org/packages/archive-contents
+;;	が 502 proxy error を返していた。多分これが原因。
+;;2011/12/29 9:10 なんか直ってた。
+(require 'package)
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
+(package-initialize)
+
+;;2011/12/29 paredit-mode
+;; https://github.com/technomancy/clojure-mode
+(defun turn-on-paredit () (paredit-mode 1))
+(add-hook 'clojure-mode-hook 'turn-on-paredit)
 
 ;;2011/4/21 anything auto-install
 (require 'auto-install)
-(setq auto-install-directory "~/.emacs.d/auto-install/")
+(setq auto-install-directory "~/.emacs.d/elisp/auto-install/")
+;;2011/12/28 ここで wget がないエラーが出るからインストールして /usr/bin にシンボリックリンク張っとく
+;; sudo ln -s /usr/local/bin/wget /usr/bin/wget
+;; http://d.hatena.ne.jp/nsymtks/20110617/1308256969
 (auto-install-update-emacswiki-package-name t)
 (auto-install-compatibility-setup)
+
 ;; anything
 (require 'anything-startup)
 ;(mac-add-ignore-shortcut '(ctl ?'))
@@ -46,72 +62,14 @@
     (move-to-column col)))
 (define-key global-map "\C-c\C-d" 'killing-line)
 
-;;2011/4/18 ruby
-(setq load-path
-      (append
-       (list
-        (expand-file-name "~/.emacs.d/ruby/")
-        )
-       load-path))
-(defun try-complete-abbrev (old)
-  (if (expand-abbrev) t nil))
-
-;; ruby-mode
-(autoload 'ruby-mode "ruby-mode"
-  "Mode for editing ruby source files" t)
-(setq auto-mode-alist
-      (append '(("\\.rb$" . ruby-mode)) auto-mode-alist))
-(setq interpreter-mode-alist (append '(("ruby" . ruby-mode))
-                                     interpreter-mode-alist))
-(autoload 'run-ruby "inf-ruby"
-  "Run an inferior Ruby process")
-(autoload 'inf-ruby-keys "inf-ruby"
-  "Set local key defs for inf-ruby in ruby-mode")
-(add-hook 'ruby-mode-hook
-          '(lambda () (inf-ruby-keys)))
-
-;; ruby-electric
-(require 'ruby-electric)
-(add-hook 'ruby-mode-hook '(lambda () (ruby-electric-mode t)))
-
-;; rubydb
-(autoload 'rubydb "rubydb3x"
-  "run rubydb on program file in buffer *gud-file*.
-the directory containing file becomes the initial working directory
-and source-file directory for your debugger." t)
-
-;; Rinari
-(add-to-list 'load-path "~/.emacs.d/rinari")
-(require 'rinari)
-
-;; rails
-;;(defun try-complete-abbrev (old)
-;;  (if (expand-abbrev) t nil))
-;;(setq hippie-expand-try-functions-list
-;;      '(try-complete-abbrev
-;;        try-complete-file-name
-;;        try-expand-dabbrev))
-;;(setq rails-use-mongrel t)
-;;(require 'cl)
-;;(require 'rails)
-
-(setq hippie-expand-try-functions-list
-      '(try-complete-abbrev
-        try-complete-file-name
-        try-expand-dabbrev))
-(setq rails-use-mongrel t)
-(require 'rails)
-
-;http://d.hatena.ne.jp/higepon/20061222/1166774270
-(define-key rails-minor-mode-map "\C-c\C-p" 'rails-lib:run-primary-switch)
-(define-key rails-minor-mode-map "\C-c\C-n" 'rails-lib:run-secondary-switch)
-
-;; ruby-block
-;; http://d.hatena.ne.jp/yuko1658/20071213/1197517201
-(require 'ruby-block)
-(ruby-block-mode t)
-;; ミニバッファに表示し, かつ, オーバレイする.
-(setq ruby-block-highlight-toggle t)
+;;2010/10/25
+(require 'color-theme)
+(require 'zenburn)
+(eval-after-load "color-theme"
+  '(progn
+     (color-theme-initialize)
+     ;;(color-theme-gnome2)
+     (color-theme-zenburn)))
 
 ;;2011/2/21 tab to space
 (setq-default tab-width 2 indent-tabs-mode nil)
@@ -142,27 +100,19 @@ and source-file directory for your debugger." t)
           nil
         (font-lock-mode t))))
 
-;;2010/10/29 markdown-mode http://jblevins.org/projects/markdown-mode/
-(autoload 'markdown-mode "markdown-mode.el"
-   "Major mode for editing Markdown files" t)
-(setq auto-mode-alist
-   (cons '("\\.text" . markdown-mode) auto-mode-alist))
+;; ;;2010/10/29 markdown-mode http://jblevins.org/projects/markdown-mode/
+;; (autoload 'markdown-mode "markdown-mode.el"
+;;    "Major mode for editing Markdown files" t)
+;; (setq auto-mode-alist
+;;    (cons '("\\.text" . markdown-mode) auto-mode-alist))
 
 ;;2010/10/27 back slash http://d.hatena.ne.jp/Watson/20100207/1265476938
 (define-key global-map [?¥] [?\\])
 
-;;2010/10/27 utf-8 http://rd.clojure-users.org/entry/view/52001
+;;2010/10/27 utf-8
+;; http://rd.clojure-users.org/entry/view/52001
+;; JAVA_OPTS="-Dswank.encoding=utf-8-unix" lein swank
 (setq slime-net-coding-system 'utf-8-unix)
-
-;;2010/10/25
-(add-to-list 'load-path "~/.emacs.d/color-theme-6.6.0")
-(require 'color-theme)
-(require 'zenburn)
-(eval-after-load "color-theme"
-  '(progn
-     (color-theme-initialize)
-     ;;(color-theme-gnome2)
-     (color-theme-zenburn)))
 
 ;;2010/10/20 tab symbol completion.
 ;;http://d.hatena.ne.jp/fatrow/20101020/tab_completion
@@ -176,8 +126,12 @@ and source-file directory for your debugger." t)
 ;;2010/10/20 command key -> Meta  http://www.emacswiki.org/emacs/AquamacsFAQ
 (setq mac-command-modifier 'meta)
 
-;;2010/10/20 highlighting in the slime repl http://github.com/technomancy/swank-clojure
-(add-hook 'slime-repl-mode-hook 'clojure-mode-font-lock-setup)
+;;2010/10/20 highlighting in the slime repl
+;; http://github.com/technomancy/swank-clojure
+(add-hook 'slime-repl-mode-hook
+          (defun clojure-mode-slime-font-lock ()
+            (let (font-lock-mode)
+              (clojure-mode-font-lock-setup))))
 
 ;;2010/10/20 auto-complete.el http://dev.ariel-networks.com/Members/matsuyama/auto-complete
 (require 'auto-complete)
@@ -201,14 +155,13 @@ and source-file directory for your debugger." t)
 ;;              ))
 
 ;;2010/1/28 for shell-toggle  http://gihyo.jp/admin/serial/01/ubuntu-recipe/0038
-(load-library "~/.emacs.d/shell-toggle-patched.el")
-  (autoload 'shell-toggle "shell-toggle"
-   "Toggles between the *shell* buffer and whatever buffer you are editing."
-   t)
-  (autoload 'shell-toggle-cd "shell-toggle"
-   "Pops up a shell-buffer and insert a \"cd <file-dir>\" command." t)
-  (global-set-key "\C-ct" 'shell-toggle)
-  (global-set-key "\C-cd" 'shell-toggle-cd)
+(autoload 'shell-toggle "shell-toggle"
+  "Toggles between the *shell* buffer and whatever buffer you are editing."
+  t)
+(autoload 'shell-toggle-cd "shell-toggle"
+  "Pops up a shell-buffer and insert a \"cd <file-dir>\" command." t)
+(global-set-key "\C-ct" 'shell-toggle)
+(global-set-key "\C-cd" 'shell-toggle-cd)
 
 ;; set encoding UTF-8
 (modify-coding-system-alist 'process "gosh" '(utf-8 . utf-8))
@@ -261,6 +214,7 @@ and source-file directory for your debugger." t)
 ;  "\C-cs" 'scheme-other-window)
 
 ;; blink paren
+;; Aquamacs
 (show-paren-mode t)
 
 ;; indent settings
@@ -336,10 +290,10 @@ and source-file directory for your debugger." t)
 ;;; interfacing with ELPA, the package archive.
 ;;; Move this code earlier if you want to reference
 ;;; packages in your .emacs.
-(when
-    (load
-     (expand-file-name "~/.emacs.d/elpa/package.el"))
-  (package-initialize))
+;; (when
+;;     (load
+;;      (expand-file-name "~/.emacs.d/elpa/package.el"))
+;;  (package-initialize))
 
 
 
@@ -357,7 +311,7 @@ and source-file directory for your debugger." t)
 ;; https://github.com/clojure/clojurescript/wiki/Emacs-%26-inferior-lisp-mode
 (setq inferior-lisp-program "~/bin/browser-repl")
 ;; clojure-mode for .cljs
-(add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
+;;(add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
 
 ;;2011/12/11 for daily memo
 ;; http://0xcc.net/unimag/1/
