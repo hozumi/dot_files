@@ -19,6 +19,15 @@
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 
+;;2010/10/25
+(require 'color-theme)
+(require 'zenburn)
+(eval-after-load "color-theme"
+  '(progn
+     (color-theme-initialize)
+     ;;(color-theme-gnome2)
+     (color-theme-zenburn)))
+
 ;;2011/12/29 paredit-mode
 ;; https://github.com/technomancy/clojure-mode
 (defun turn-on-paredit () (paredit-mode 1))
@@ -61,15 +70,6 @@
       (setq numlines (- numlines 1)))
     (move-to-column col)))
 (define-key global-map "\C-c\C-d" 'killing-line)
-
-;;2010/10/25
-(require 'color-theme)
-(require 'zenburn)
-(eval-after-load "color-theme"
-  '(progn
-     (color-theme-initialize)
-     ;;(color-theme-gnome2)
-     (color-theme-zenburn)))
 
 ;;2011/2/21 tab to space
 (setq-default tab-width 2 indent-tabs-mode nil)
@@ -215,7 +215,13 @@
 
 ;; blink paren
 ;; Aquamacs
-(show-paren-mode t)
+(show-paren-mode 1)
+;; 2011/12/30 paren color
+;; http://www.emacswiki.org/emacs/ShowParenMode
+(require 'paren)
+(set-face-background 'show-paren-match-face "#6bc");;(face-background 'default))
+(set-face-foreground 'show-paren-match-face (face-foreground 'default));;"#664")
+(set-face-attribute 'show-paren-match-face nil :weight 'extra-bold)
 
 ;; indent settings
 (put 'and-let* 'scheme-indent-function 1)
@@ -311,7 +317,7 @@
 ;; https://github.com/clojure/clojurescript/wiki/Emacs-%26-inferior-lisp-mode
 (setq inferior-lisp-program "~/bin/browser-repl")
 ;; clojure-mode for .cljs
-;;(add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
 
 ;;2011/12/11 for daily memo
 ;; http://0xcc.net/unimag/1/
