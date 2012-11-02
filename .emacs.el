@@ -27,9 +27,9 @@
 ;;2011/4/21 anything auto-install
 (require 'auto-install)
 (setq auto-install-directory "~/.emacs.d/elisp/auto-install/")
-;;2011/12/28 ここで wget がないエラーが出るからインストールして /usr/bin にシンボリックリンク張っとく
-;; sudo ln -s /usr/local/bin/wget /usr/bin/wget
-;; http://d.hatena.ne.jp/nsymtks/20110617/1308256969
+;; 2012/11/2 http://d.hatena.ne.jp/rubikitch/20091221/autoinstall#c1308105294
+;; wget のエラー回避
+(setq auto-install-use-wget nil)
 (auto-install-update-emacswiki-package-name t)
 (auto-install-compatibility-setup)
 
