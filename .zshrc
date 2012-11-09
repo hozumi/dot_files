@@ -6,7 +6,7 @@ export EC2_HOME=/Users/fatrow/aws/ec2-api-tools
 export EC2_PRIVATE_KEY=/Users/fatrow/aws/pk-C3FZXKTC7O5YZMQXNN5D6HF7FKE33BBL.pem
 export EC2_CERT=/Users/fatrow/aws/cert-C3FZXKTC7O5YZMQXNN5D6HF7FKE33BBL.pem
 export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Home
-export PATH=$PATH:$JAVA_HOME/bin:$EC2_HOME/bin:~/bin:/opt/local/bin:~/code/appengine-java-sdk-1.3.3.1/bin/:/Users/fatrow/app/apache-cassandra-0.6.3/bin
+export PATH=$PATH:$JAVA_HOME/bin:$EC2_HOME/bin:~/bin:/opt/local/bin:~/code/appengine-java-sdk-1.3.3.1/bin:/Users/fatrow/app/apache-cassandra-0.6.3/bin
 export CLASSPATH=$CLASSPASS:/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Classes:~/.clojure/clojure.jar
 autoload -U compinit; compinit
 alias clj=clj-env-dir
