@@ -54,7 +54,7 @@ RPROMPT=$'$(vcs_info_wrapper)'
 
 #2011/4/12 rvm
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-rvm use 1.9.2 > /dev/null
+rvm use 1.9.3 > /dev/null
 #export PATH=$GEM_HOME/bin:$PATH
 
 #2011/4/13 android
