@@ -82,3 +82,8 @@ compinit
 
 #2013/1/25 for npm bin
 export PATH=/usr/local/share/npm/bin:$PATH
+
+#2013/2/23 rbenv
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init - zsh)"
+source ~/.rbenv/completions/rbenv.zsh
