@@ -79,3 +79,6 @@ zstyle ':completion:*:default' menu select=1
 # コマンド特有の補完
 autoload -U compinit
 compinit
+
+#2013/1/25 for npm bin
+export PATH=/usr/local/share/npm/bin:$PATH
