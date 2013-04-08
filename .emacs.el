@@ -339,3 +339,8 @@
 ;;2011/12/11 kill-summary
 (autoload 'kill-summary "kill-summary" nil t)
 (define-key global-map "\ey" 'kill-summary)
+
+;;2013/1/13 nrepl
+(require 'nrepl)
+(add-to-list 'same-window-buffer-names "*nrepl*")
+(add-hook 'nrepl-mode-hook 'paredit-mode)
