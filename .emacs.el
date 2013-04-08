@@ -318,6 +318,8 @@
 (setq inferior-lisp-program "~/bin/browser-repl")
 ;; clojure-mode for .cljs
 (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
+;;2013/2/18 clojure-mode for .edn
+(add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
 
 ;;2011/12/11 for daily memo
 ;; http://0xcc.net/unimag/1/
