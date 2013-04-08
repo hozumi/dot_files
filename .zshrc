@@ -88,3 +88,6 @@ export PATH=/usr/local/share/npm/bin:$PATH
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init - zsh)"
 source ~/.rbenv/completions/rbenv.zsh
+
+#2013/3/1 python (brew)
+export PATH="/usr/local/share/python:${PATH}"
